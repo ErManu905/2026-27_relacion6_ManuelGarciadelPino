@@ -1,21 +1,26 @@
 <?php
-
-function paginaError($mensaje)
+// Muestra una página de error.
+function paginaError(string $mensaje): void
 {
-  header("HTTP/1.0 404 $mensaje");
-  inicioCabecera("PRACTICA");
-  finCabecera();
-  inicioCuerpo("ERROR");
-  echo "<br />\n";
-  echo $mensaje;
-  echo "<br />\n";
-  echo "<br />\n";  echo "<br />\n";
-  echo "<a href='/index.php'>Ir a la pagina principal</a>\n";
-  
-  finCuerpo();  
+    http_response_code(404);
+
+    inicioCabecera("TIENDA");
+    finCabecera();
+
+    inicioCuerpo("ERROR", "Inicio > Error");
+
+    echo "<br />\n";
+    echo htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8');
+    echo "<br />\n";
+    echo "<br />\n";
+
+    echo "<a href='" . RUTABASE . "/index.php'>Ir a la pagina principal</a>\n";
+
+    finCuerpo();
 }
 
-function inicioCabecera($titulo)
+// Inicia la cabecera HTML.
+function inicioCabecera(string $titulo): void
 {
 ?>
 <!DOCTYPE html>
@@ -23,40 +28,37 @@ function inicioCabecera($titulo)
     <head>
         <meta charset="utf-8">
 
-        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
-        Remove this if you use the .htaccess -->
-            <meta http-equiv="X-UA-Compatible"  content="IE=edge,chrome=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
         <title><?php echo $titulo ?></title>
         <meta name="description" content="">
         <meta name="author" content="Administrador">
 
-        <meta name="viewport" content="width=device-width; initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
-        <link rel="shortcut icon" href="/favicon.ico">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-        
-        <link rel="stylesheet" type="text/css" href="/estilos/base.css">
+        <link rel="stylesheet" type="text/css"
+              href="<?php echo RUTABASE; ?>/css/estilos.css">
+
 <?php
 }
 
-function finCabecera()
+// Finaliza la cabecera HTML.
+function finCabecera(): void
 {
 ?>
     </head>
-<?php   
+<?php
 }
 
-function inicioCuerpo($cabecera, $ubicacion = "Inicio")
+// Inicia el cuerpo de la página y muestra el menú y la ubicación.
+function inicioCuerpo(string $cabecera, string $ubicacion = "Inicio"): void
 {
-    global $acceso;
 ?>
     <body>
         <div id="documento">
 
             <header>
-                <h1 id="titulo"><?php echo $cabecera; ?></h1>
+                <h1 id="titulo"><?php echo htmlspecialchars($cabecera, ENT_QUOTES, 'UTF-8'); ?></h1>
             </header>
 
             <div id="barraLogin">
@@ -64,35 +66,33 @@ function inicioCuerpo($cabecera, $ubicacion = "Inicio")
 
             <div id="barraMenu">
                 <ul>
-                    <li><a href="/index.php">Inicio</a></li>
-                    <li><a href="/aplicacion/relacion1/index.php">Relación 1</a></li>
-                    <li><a href="/aplicacion/relacion2/index.php">Relación 2</a></li>
-                    <li><a href="/aplicacion/relacion3/index.php">Relación 3</a></li>
-                    <li><a href="/aplicacion/relacion4/index.php">Relación 4</a></li>
-                    <li><a href="/aplicacion/relacion5/index.php">Relación 5</a></li>
+                    <li><a href="<?php echo RUTABASE; ?>/index.php">Inicio</a></li>
                 </ul>
             </div>
 
             <div id="barraUbicacion">
-                <?php echo $ubicacion; ?>
+                <?php echo htmlspecialchars($ubicacion, ENT_QUOTES, 'UTF-8'); ?>
             </div>
 
             <div>
 <?php
 }
 
-function finCuerpo()
+// Finaliza el cuerpo de la página.
+function finCuerpo(): void
 {
 ?>
                 <br />
                 <br />
             </div>
+
             <footer>
-                <hr width="90%"  />  
+                <hr width="90%" />
                 <div>
-                    &copy; Copyright  by Profesor
+                    &copy; Copyright Tienda - Relación 6
                 </div>
             </footer>
+
         </div>
     </body>
 </html>
