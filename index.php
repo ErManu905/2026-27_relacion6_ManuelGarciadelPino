@@ -4,10 +4,10 @@ include_once(dirname(__FILE__) . "/cabecera.php");
 
 
 //dibuja la plantilla de la vista
-inicioCabecera("APLICACION PRIMER TRIMESTRE");
+inicioCabecera("Tienda Manolo");
 cabecera();
 finCabecera();
-inicioCuerpo("2DAW APLICACION");
+inicioCuerpo("Tienda Manolo");
 cuerpo();  //llamo a la vista
 finCuerpo();
 // **********************************************************
