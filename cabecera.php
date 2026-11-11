@@ -8,18 +8,13 @@ if (MODO_TRABAJO=="produccion")
     else 
         error_reporting(E_ALL);  
 
-spl_autoload_register(function ($clase){
-    $ruta=RUTABASE."/scripts/clases/";
-    $fichero=$ruta."$clase.php";
-    
-    if (file_exists($fichero))
-        {
-            require_once($fichero);
-        }
-      else
-        {
-            throw new Exception("La clase $clase no se ha encontrado.");
-        }
+spl_autoload_register(function (string $nombreClase): void {
+
+    $archivo = __DIR__ . '/aplicacion/clases/curso2026/' . $nombreClase . '.php';
+
+    if (is_file($archivo)) {
+        require_once $archivo;
+    }
 });
 
 include(RUTABASE."/aplicacion/plantilla/plantilla.php");
