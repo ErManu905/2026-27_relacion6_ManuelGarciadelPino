@@ -21,6 +21,7 @@ abstract class MuebleBase
     private string $_fechaIniVenta = '';
     private string $_fechaFinVenta = '';
     private float $_precio = 30.0;
+    private Caracteristicas $_caracteristicas;
 
     /**
      * Constructor de MuebleBase.
@@ -45,6 +46,8 @@ abstract class MuebleBase
         if (!$this->setNombre($nombre)) {
             throw new Exception('El nombre del mueble no es válido.');
         }
+
+        $this->_caracteristicas = new Caracteristicas();
 
         // Establecemos el fabricante.
         if (!$this->setFabricante($fabricante)) {
@@ -337,7 +340,8 @@ abstract class MuebleBase
             . ' a partir del año ' . $this->_anio
             . ', vendido desde ' . $this->_fechaIniVenta
             . ' hasta ' . $this->_fechaFinVenta
-            . ', precio ' . $this->_precio;
+            . ', precio ' . $this->_precio
+            . ', características: ' . $this->_caracteristicas;
     }
 
     // Impedimos acceder directamente a las propiedades.
@@ -363,4 +367,36 @@ abstract class MuebleBase
     {
         throw new Exception('No se permite eliminar directamente las propiedades.');
     }
+
+    // Añade características al mueble.
+public function anadirCaracteristicas(mixed ...$datos): void
+{
+    // Obtenemos el número de argumentos recibidos.
+    $total = count($datos);
+
+    // Si hay un número impar, descartamos el último argumento.
+    if ($total % 2 != 0) {
+        $total--;
+    }
+
+    // Recorremos los argumentos de dos en dos.
+    for ($i = 0; $i < $total; $i += 2) {
+
+        $nombre = $datos[$i];
+        $valor = $datos[$i + 1];
+
+        // El nombre de la característica debe ser una cadena.
+        if (!is_string($nombre)) {
+            throw new InvalidArgumentException('El nombre debe ser una cadena.');
+        }
+
+        // Guardamos la característica.
+        $this->_caracteristicas->$nombre = $valor;
+    }
+}
+// Devuelve el objeto de características.
+public function getCaracteristicas(): Caracteristicas
+{
+    return $this->_caracteristicas;
+}
 }
