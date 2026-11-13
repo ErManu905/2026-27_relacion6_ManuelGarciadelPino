@@ -1,8 +1,6 @@
 <?php
-/**
- * Clase que representa un mueble tradicional.
- * Hereda de MuebleBase.
- */
+
+// Clase que representa un mueble tradicional.
 final class MuebleTradicional extends MuebleBase
 {
     // Peso del mueble.
@@ -11,7 +9,7 @@ final class MuebleTradicional extends MuebleBase
     // Serie del mueble.
     private string $_serie = 'S01';
 
-    // Constructor de MuebleTradicional.
+    // Constructor.
     public function __construct(
         string $nombre,
         string $fabricante = 'FaMu:',
@@ -23,7 +21,7 @@ final class MuebleTradicional extends MuebleBase
         float $peso = 15.0,
         string $serie = 'S01'
     ) {
-        // Llamamos al constructor de MuebleBase.
+        // Ejecutamos el constructor de la clase padre.
         parent::__construct(
             $nombre,
             $fabricante,
@@ -40,9 +38,7 @@ final class MuebleTradicional extends MuebleBase
         }
 
         // Establecemos la serie.
-        if (!$this->setSerie($serie)) {
-            $this->setSerie('S01');
-        }
+        $this->setSerie($serie);
     }
 
     // Devuelve el peso.
@@ -51,7 +47,7 @@ final class MuebleTradicional extends MuebleBase
         return $this->_peso;
     }
 
-    // Comprueba y establece el peso.
+    // Establece el peso.
     public function setPeso(float $peso): bool
     {
         if ($peso < 15 || $peso > 300) {
@@ -77,7 +73,7 @@ final class MuebleTradicional extends MuebleBase
         return true;
     }
 
-    // Indica las propiedades adicionales de esta clase.
+    // Devuelve las propiedades adicionales.
     public function damePropiedadesAdicionales(): array
     {
         return ['Peso', 'Serie'];

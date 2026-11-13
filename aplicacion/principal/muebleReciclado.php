@@ -1,14 +1,12 @@
 <?php
-/**
- * Clase que representa un mueble reciclado.
- * Hereda de MuebleBase.
- */
+
+// Clase que representa un mueble reciclado.
 final class MuebleReciclado extends MuebleBase
 {
     // Porcentaje de material reciclado.
     private int $_porcentajeReciclado = 10;
 
-    // Constructor de MuebleReciclado.
+    // Constructor.
     public function __construct(
         string $nombre,
         string $fabricante = 'FaMu:',
@@ -19,7 +17,7 @@ final class MuebleReciclado extends MuebleBase
         float $precio = 30.0,
         int $porcentajeReciclado = 10
     ) {
-        // Llamamos al constructor de MuebleBase.
+        // Ejecutamos el constructor de la clase padre.
         parent::__construct(
             $nombre,
             $fabricante,
@@ -30,7 +28,7 @@ final class MuebleReciclado extends MuebleBase
             $precio
         );
 
-        // Establecemos el porcentaje reciclado.
+        // Establecemos el porcentaje.
         if (!$this->setPorcentajeReciclado($porcentajeReciclado)) {
             $this->setPorcentajeReciclado(10);
         }
@@ -42,7 +40,7 @@ final class MuebleReciclado extends MuebleBase
         return $this->_porcentajeReciclado;
     }
 
-    // Comprueba y establece el porcentaje reciclado.
+    // Establece el porcentaje reciclado.
     public function setPorcentajeReciclado(int $porcentaje): bool
     {
         if ($porcentaje < 0 || $porcentaje > 100) {
@@ -54,13 +52,13 @@ final class MuebleReciclado extends MuebleBase
         return true;
     }
 
-    // Indica las propiedades adicionales de esta clase.
+    // Devuelve las propiedades adicionales.
     public function damePropiedadesAdicionales(): array
     {
         return ['PorcentajeReciclado'];
     }
 
-    // Añade el porcentaje reciclado a la conversión a cadena.
+    // Añade el porcentaje a la conversión a cadena.
     public function __toString(): string
     {
         return parent::__toString()

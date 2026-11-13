@@ -1,8 +1,6 @@
 <?php
-/**
- * Clase que almacena características dinámicas.
- * Permite recorrerlas mediante foreach.
- */
+
+// Clase que almacena características adicionales.
 class Caracteristicas implements IteratorAggregate
 {
     // Array donde guardamos las características.
@@ -17,7 +15,7 @@ class Caracteristicas implements IteratorAggregate
         // Comprobamos si la característica ya existe.
         $existe = array_key_exists($nombre, $this->_caracteristicas);
 
-        // Si se ha añadido ULTIMA, no permitimos nuevas características.
+        // Si ULTIMA está activada, no permitimos añadir nuevas.
         if ($this->_ultima && !$existe) {
             throw new Exception('No se pueden añadir más características.');
         }
@@ -25,13 +23,13 @@ class Caracteristicas implements IteratorAggregate
         // Guardamos la característica.
         $this->_caracteristicas[$nombre] = $valor;
 
-        // Si la característica es ULTIMA, bloqueamos las nuevas.
+        // Activamos el bloqueo cuando se añade ULTIMA.
         if ($nombre === 'ULTIMA') {
             $this->_ultima = true;
         }
     }
 
-    // Devuelve el valor de una característica.
+    // Devuelve una característica.
     public function __get(string $nombre): mixed
     {
         if (!array_key_exists($nombre, $this->_caracteristicas)) {
@@ -47,48 +45,57 @@ class Caracteristicas implements IteratorAggregate
         return array_key_exists($nombre, $this->_caracteristicas);
     }
 
-    // Permite recorrer las características con foreach.
+    // Permite utilizar foreach.
     public function getIterator(): Traversable
     {
-        // Invertimos el orden de las características.
+        // Devolvemos las características en orden inverso.
         $caracteristicas = array_reverse($this->_caracteristicas, true);
 
         return new ArrayIterator($caracteristicas);
     }
 
-    // Convierte todas las características en una cadena.
+    // Convierte las características en una cadena.
     public function __toString(): string
     {
         $resultado = [];
 
         foreach ($this as $nombre => $valor) {
 
-            // Convertimos los valores booleanos en texto.
-            if (is_bool($valor)) {
+            // Si el valor es una cadena, lo dejamos como está.
+            if (is_string($valor)) {
+                $valorTexto = $valor;
+            }
+
+            // Si es booleano, mostramos true o false.
+            elseif (is_bool($valor)) {
                 if ($valor) {
-                    $valor = 'true';
+                    $valorTexto = 'true';
                 } else {
-                    $valor = 'false';
+                    $valorTexto = 'false';
                 }
             }
 
-            // Convertimos los valores nulos en texto.
+            // Si es null, mostramos null.
             elseif ($valor === null) {
-                $valor = 'null';
+                $valorTexto = 'null';
             }
 
-            // Convertimos arrays y objetos en cadenas.
-            elseif (is_array($valor) || is_object($valor)) {
-                $valor = json_encode($valor, JSON_UNESCAPED_UNICODE);
+            // Si es un número, lo convertimos en cadena.
+            elseif (is_numeric($valor)) {
+                $valorTexto = (string) $valor;
             }
 
-            // Convertimos los demás valores a cadena.
+            // Para arrays u objetos utilizamos JSON.
             else {
-                $valor = (string) $valor;
+                $valorTexto = json_encode($valor, JSON_UNESCAPED_UNICODE);
+
+                if ($valorTexto === false) {
+                    $valorTexto = '';
+                }
             }
 
-            // Añadimos el nombre y el valor al resultado.
-            $resultado[] = $nombre . ':' . $valor;
+            // Añadimos el nombre y el valor.
+            $resultado[] = $nombre . ':' . $valorTexto;
         }
 
         // Separamos las características con punto y coma.

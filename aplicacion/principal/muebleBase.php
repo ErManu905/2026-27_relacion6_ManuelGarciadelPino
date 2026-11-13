@@ -1,13 +1,13 @@
 <?php
-// Cargamos la librería de validación.
+
+// Cargamos la librería de validaciones.
 require_once dirname(__DIR__, 3) . '/scripts/validacion.php';
 
-/**
- * Clase abstracta que contiene las propiedades comunes de los muebles.
- */
+// Clase abstracta que contiene las propiedades comunes de los muebles.
 abstract class MuebleBase
 {
-    // Número máximo de muebles que se pueden crear.
+    // Número máximo de muebles.
+    // El enunciado no indica una cantidad, por lo que usamos 10 provisionalmente.
     public const MAXIMO_MUEBLES = 10;
 
     // Contador de muebles creados.
@@ -21,11 +21,11 @@ abstract class MuebleBase
     private string $_fechaIniVenta = '';
     private string $_fechaFinVenta = '';
     private float $_precio = 30.0;
+
+    // Objeto que almacena las características adicionales.
     private Caracteristicas $_caracteristicas;
 
-    /**
-     * Constructor de MuebleBase.
-     */
+    // Constructor.
     public function __construct(
         string $nombre,
         string $fabricante = 'FaMu:',
@@ -35,24 +35,23 @@ abstract class MuebleBase
         string $fechaFinVenta = '31/12/2040',
         float $precio = 30.0
     ) {
-        // Comprobamos si todavía se pueden crear muebles.
+        // Comprobamos si se pueden crear más muebles.
         $numero = 0;
 
         if (!self::puedeCrear($numero)) {
             throw new Exception('Se ha alcanzado el máximo de muebles.');
         }
 
-        // El nombre es obligatorio.
-        if (!$this->setNombre($nombre)) {
-            throw new Exception('El nombre del mueble no es válido.');
-        }
-
+        // Creamos el objeto de características.
         $this->_caracteristicas = new Caracteristicas();
 
-        // Establecemos el fabricante.
-        if (!$this->setFabricante($fabricante)) {
-            $this->setFabricante('FaMu:');
+        // El nombre es obligatorio.
+        if (!$this->setNombre($nombre)) {
+            throw new Exception('El nombre no es válido.');
         }
+
+        // Establecemos el fabricante.
+        $this->setFabricante($fabricante);
 
         // Establecemos el país.
         if (!$this->setPais($pais)) {
@@ -64,38 +63,24 @@ abstract class MuebleBase
             $this->setAnio(2020);
         }
 
-        // Si no se indica fecha inicial, usamos el 1 de enero del año.
+        // Si no se indica fecha inicial, utilizamos el 1 de enero del año.
         if ($fechaIniVenta === null) {
             $fechaIniVenta = '01/01/' . $this->_anio;
         }
 
         // Establecemos la fecha inicial.
         if (!$this->setFechaIniVenta($fechaIniVenta)) {
-            $this->_fechaIniVenta = '01/01/' . $this->_anio;
+            $this->setFechaIniVenta('01/01/' . $this->_anio);
         }
 
         // Establecemos la fecha final.
         if (!$this->setFechaFinVenta($fechaFinVenta)) {
 
-            // Si falla, usamos el valor por defecto.
-            $this->_fechaFinVenta = '31/12/2040';
+            // Si falla, probamos con la fecha por defecto.
+            if (!$this->setFechaFinVenta('31/12/2040')) {
 
-            // Comprobamos que la fecha final no sea anterior a la inicial.
-            $fechaInicio = DateTime::createFromFormat(
-                '!d/m/Y',
-                $this->_fechaIniVenta
-            );
-
-            $fechaFinal = DateTime::createFromFormat(
-                '!d/m/Y',
-                $this->_fechaFinVenta
-            );
-
-            // Si el valor por defecto no sirve, usamos la fecha inicial.
-            if ($fechaInicio !== false && $fechaFinal !== false) {
-                if ($fechaFinal < $fechaInicio) {
-                    $this->_fechaFinVenta = $this->_fechaIniVenta;
-                }
+                // Si tampoco es válida, utilizamos la fecha inicial.
+                $this->setFechaFinVenta($this->_fechaIniVenta);
             }
         }
 
@@ -104,7 +89,7 @@ abstract class MuebleBase
             $this->setPrecio(30.0);
         }
 
-        // Contamos el mueble cuando se ha creado correctamente.
+        // Sumamos un mueble al contador.
         self::$mueblesCreados++;
     }
 
@@ -114,7 +99,7 @@ abstract class MuebleBase
         return $this->_nombre;
     }
 
-    // Comprueba y establece el nombre.
+    // Establece el nombre.
     public function setNombre(string $nombre): bool
     {
         $nombre = trim($nombre);
@@ -143,17 +128,17 @@ abstract class MuebleBase
         return $this->_fabricante;
     }
 
-    // Comprueba y establece el fabricante.
+    // Establece el fabricante.
     public function setFabricante(string $fabricante): bool
     {
         $fabricante = trim($fabricante);
 
-        // Añadimos FaMu: si no aparece al principio.
+        // Añadimos FaMu: si no lo tiene al principio.
         if (substr($fabricante, 0, 5) !== 'FaMu:') {
             $fabricante = 'FaMu:' . $fabricante;
         }
 
-        // Recortamos el fabricante a 30 caracteres.
+        // Limitamos el fabricante a 30 caracteres.
         $fabricante = mb_substr($fabricante, 0, 30, 'UTF-8');
 
         $this->_fabricante = $fabricante;
@@ -167,7 +152,7 @@ abstract class MuebleBase
         return $this->_pais;
     }
 
-    // Comprueba y establece el país.
+    // Establece el país.
     public function setPais(string $pais): bool
     {
         $pais = trim($pais);
@@ -187,15 +172,16 @@ abstract class MuebleBase
         return $this->_anio;
     }
 
-    // Comprueba y establece el año.
+    // Establece el año.
     public function setAnio(int $anio): bool
     {
-        // Comprobamos que el año esté entre 2020 y el actual.
-        if (!validaEntero($anio, 2020, (int) date('Y'), 2020)) {
+        $anioValidado = $anio;
+
+        if (!validaEntero($anioValidado, 2020, (int) date('Y'), 2020)) {
             return false;
         }
 
-        // Si ya existe una fecha inicial, comprobamos que siga siendo válida.
+        // Comprobamos que la fecha inicial siga siendo válida.
         if ($this->_fechaIniVenta !== '') {
 
             $fechaInicio = DateTime::createFromFormat(
@@ -205,26 +191,30 @@ abstract class MuebleBase
 
             $fechaMinima = DateTime::createFromFormat(
                 '!d/m/Y',
-                '01/01/' . $anio
+                '01/01/' . $anioValidado
             );
+
+            if ($fechaInicio === false || $fechaMinima === false) {
+                return false;
+            }
 
             if ($fechaInicio < $fechaMinima) {
                 return false;
             }
         }
 
-        $this->_anio = $anio;
+        $this->_anio = $anioValidado;
 
         return true;
     }
 
-    // Devuelve la fecha inicial de venta.
+    // Devuelve la fecha inicial.
     public function getFechaIniVenta(): string
     {
         return $this->_fechaIniVenta;
     }
 
-    // Comprueba y establece la fecha inicial.
+    // Establece la fecha inicial.
     public function setFechaIniVenta(string $fecha): bool
     {
         // Comprobamos que sea una fecha válida.
@@ -239,12 +229,16 @@ abstract class MuebleBase
             '01/01/' . $this->_anio
         );
 
-        // No puede ser anterior al 1 de enero del año de fabricación.
+        if ($fechaNueva === false || $fechaMinima === false) {
+            return false;
+        }
+
+        // No puede ser anterior al año de fabricación.
         if ($fechaNueva < $fechaMinima) {
             return false;
         }
 
-        // Si ya existe una fecha final, no podemos superarla.
+        // No puede superar la fecha final.
         if ($this->_fechaFinVenta !== '') {
 
             $fechaFinal = DateTime::createFromFormat(
@@ -252,7 +246,7 @@ abstract class MuebleBase
                 $this->_fechaFinVenta
             );
 
-            if ($fechaNueva > $fechaFinal) {
+            if ($fechaFinal === false || $fechaNueva > $fechaFinal) {
                 return false;
             }
         }
@@ -262,13 +256,13 @@ abstract class MuebleBase
         return true;
     }
 
-    // Devuelve la fecha final de venta.
+    // Devuelve la fecha final.
     public function getFechaFinVenta(): string
     {
         return $this->_fechaFinVenta;
     }
 
-    // Comprueba y establece la fecha final.
+    // Establece la fecha final.
     public function setFechaFinVenta(string $fecha): bool
     {
         if (!validaFecha($fecha, '31/12/2040')) {
@@ -276,6 +270,10 @@ abstract class MuebleBase
         }
 
         $fechaNueva = DateTime::createFromFormat('!d/m/Y', $fecha);
+
+        if ($fechaNueva === false) {
+            return false;
+        }
 
         // No puede ser anterior a la fecha inicial.
         if ($this->_fechaIniVenta !== '') {
@@ -285,7 +283,7 @@ abstract class MuebleBase
                 $this->_fechaIniVenta
             );
 
-            if ($fechaNueva < $fechaInicio) {
+            if ($fechaInicio === false || $fechaNueva < $fechaInicio) {
                 return false;
             }
         }
@@ -301,22 +299,49 @@ abstract class MuebleBase
         return $this->_precio;
     }
 
-    // Comprueba y establece el precio.
+    // Establece el precio.
     public function setPrecio(float $precio): bool
     {
-        if (!validaReal($precio, 30.0, PHP_FLOAT_MAX, 30.0)) {
+        $precioValidado = $precio;
+
+        if (!validaReal($precioValidado, 30.0, PHP_FLOAT_MAX, 30.0)) {
             return false;
         }
 
-        $this->_precio = $precio;
+        $this->_precio = $precioValidado;
 
         return true;
+    }
+
+    // Añade características al mueble.
+    public function anadirCaracteristicas(mixed ...$datos): void
+    {
+        // Recorremos los argumentos de dos en dos.
+        for ($i = 0; $i + 1 < count($datos); $i += 2) {
+
+            $nombre = $datos[$i];
+            $valor = $datos[$i + 1];
+
+            // El nombre debe ser una cadena.
+            if (!is_string($nombre)) {
+                throw new InvalidArgumentException('El nombre debe ser una cadena.');
+            }
+
+            // Añadimos la característica.
+            $this->_caracteristicas->$nombre = $valor;
+        }
+    }
+
+    // Devuelve el objeto de características.
+    public function getCaracteristicas(): Caracteristicas
+    {
+        return $this->_caracteristicas;
     }
 
     // Las clases hijas deben indicar sus propiedades adicionales.
     abstract public function damePropiedadesAdicionales(): array;
 
-    // Comprueba si todavía se pueden crear muebles.
+    // Comprueba si se pueden crear más muebles.
     public static function puedeCrear(int &$numero): bool
     {
         $numero = self::MAXIMO_MUEBLES - self::$mueblesCreados;
@@ -330,7 +355,7 @@ abstract class MuebleBase
         return false;
     }
 
-    // Convierte los datos del mueble en una cadena.
+    // Convierte el mueble en una cadena.
     public function __toString(): string
     {
         return 'MUEBLE de clase ' . get_class($this)
@@ -350,7 +375,7 @@ abstract class MuebleBase
         throw new Exception('No se permite acceder directamente a las propiedades.');
     }
 
-    // Impedimos modificar directamente las propiedades.
+    // Impedimos modificar propiedades directamente.
     public function __set(string $nombre, mixed $valor): void
     {
         throw new Exception('No se permite modificar directamente las propiedades.');
@@ -367,36 +392,4 @@ abstract class MuebleBase
     {
         throw new Exception('No se permite eliminar directamente las propiedades.');
     }
-
-    // Añade características al mueble.
-public function anadirCaracteristicas(mixed ...$datos): void
-{
-    // Obtenemos el número de argumentos recibidos.
-    $total = count($datos);
-
-    // Si hay un número impar, descartamos el último argumento.
-    if ($total % 2 != 0) {
-        $total--;
-    }
-
-    // Recorremos los argumentos de dos en dos.
-    for ($i = 0; $i < $total; $i += 2) {
-
-        $nombre = $datos[$i];
-        $valor = $datos[$i + 1];
-
-        // El nombre de la característica debe ser una cadena.
-        if (!is_string($nombre)) {
-            throw new InvalidArgumentException('El nombre debe ser una cadena.');
-        }
-
-        // Guardamos la característica.
-        $this->_caracteristicas->$nombre = $valor;
-    }
-}
-// Devuelve el objeto de características.
-public function getCaracteristicas(): Caracteristicas
-{
-    return $this->_caracteristicas;
-}
 }
