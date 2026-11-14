@@ -4,14 +4,14 @@
 function obtenerDatosIndex(): array
 {
     $datos = [
-        'titulo' => 'TIENDA DE MUEBLES',
+        'titulo' => 'Tienda de Muebles Manolito Manolo',
         'mensaje' => 'Bienvenido a nuestra tienda de muebles.'
     ];
 
     return $datos;
 }
 
-// Crea los cinco muebles de la aplicación.
+// Crea los muebles de la aplicación.
 function obtenerMuebles(): array
 {
     // Array de muebles.

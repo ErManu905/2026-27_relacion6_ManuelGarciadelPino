@@ -1,26 +1,44 @@
 <?php
-include_once(dirname(__FILE__) . "/cabecera.php");
-//controlador
 
+// Cargamos la configuración y la plantilla.
+include_once(__DIR__ . "/cabecera.php");
 
-//dibuja la plantilla de la vista
+// Mostramos la cabecera.
 inicioCabecera("Tienda Manolo");
 cabecera();
 finCabecera();
+
+// Mostramos el contenido.
 inicioCuerpo("Tienda Manolo");
-cuerpo();  //llamo a la vista
+cuerpo();
 finCuerpo();
-// **********************************************************
 
-//vista
-function cabecera() 
-{}
 
-//vista
-function cuerpo()
+// -------------------------------------------------
+// VISTAS
+// -------------------------------------------------
+
+// Vista de la cabecera.
+function cabecera(): void
+{
+}
+
+// Vista del contenido.
+function cuerpo(): void
 {
 ?>
-    <br><br>
-   <a href="./aplicacion/pruebas/index.php">Acceso a pruebas</a>
+
+    <br /><br />
+
+    <h2>Actividades</h2>
+
+    <p>
+        <a href="./aplicacion/principal/index.php">
+            Acceder a la Relación 6 - Tienda
+        </a>
+    </p>
+
 <?php
 }
+
+?>

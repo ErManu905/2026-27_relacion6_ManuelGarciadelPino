@@ -1,10 +1,10 @@
 <?php
-// Muestra una página de error.
+// Función para mostrar la página de error
 function paginaError(string $mensaje): void
 {
     http_response_code(404);
 
-    inicioCabecera("TIENDA");
+    inicioCabecera("TiendaManolo");
     finCabecera();
 
     inicioCuerpo("ERROR", "Inicio > Error");
@@ -19,7 +19,7 @@ function paginaError(string $mensaje): void
     finCuerpo();
 }
 
-// Inicia la cabecera HTML.
+// Función para iniciar la cabecera de la página
 function inicioCabecera(string $titulo): void
 {
 ?>
@@ -36,13 +36,12 @@ function inicioCabecera(string $titulo): void
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" type="text/css"
-              href="<?php echo RUTABASE; ?>/css/estilos.css">
+        <link rel="stylesheet" type="text/css" href="/css/estilos.css">
 
 <?php
 }
 
-// Finaliza la cabecera HTML.
+// Esta función agrega la etiqueta de cierre de la cabecera
 function finCabecera(): void
 {
 ?>
@@ -50,7 +49,7 @@ function finCabecera(): void
 <?php
 }
 
-// Inicia el cuerpo de la página y muestra el menú y la ubicación.
+// Inicio de la página y muestra del menú
 function inicioCuerpo(string $cabecera, string $ubicacion = "Inicio"): void
 {
 ?>
@@ -78,7 +77,7 @@ function inicioCuerpo(string $cabecera, string $ubicacion = "Inicio"): void
 <?php
 }
 
-// Finaliza el cuerpo de la página.
+// Muestra el pie de página y cierra el cuerpo
 function finCuerpo(): void
 {
 ?>
@@ -89,7 +88,7 @@ function finCuerpo(): void
             <footer>
                 <hr width="90%" />
                 <div>
-                    &copy; Copyright Tienda - Relación 6
+                    &copy; Copyright TiendaManolo - Relación 6
                 </div>
             </footer>
 

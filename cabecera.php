@@ -1,5 +1,5 @@
 <?php 
-define("RUTABASE", dirname(__FILE__));
+define("RUTABASE", "");
 //define("MODO_TRABAJO","produccion"); //en "produccion o en desarrollo
 define("MODO_TRABAJO","desarrollo"); //en "produccion o en desarrollo
 
@@ -17,6 +17,4 @@ spl_autoload_register(function (string $nombreClase): void {
     }
 });
 
-include(RUTABASE."/aplicacion/plantilla/plantilla.php");
-
-//creo todos los objetos que necesita mi aplicación
+require_once __DIR__ . "/aplicacion/plantillas/plantilla.php";
