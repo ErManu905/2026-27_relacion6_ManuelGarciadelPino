@@ -16,7 +16,7 @@ function vistaModificar(
 
     echo "<h2>Modificar mueble</h2>\n";
 
-    // Si existe un mueble modificado, mostramos el resumen.
+    // Mostramos el resumen si hay muebles modificados.
     if ($muebleModificado !== null) {
 
         echo "<p>El mueble se ha modificado correctamente.</p>\n";

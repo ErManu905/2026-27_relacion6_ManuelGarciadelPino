@@ -1,36 +1,36 @@
 <?php
 
-// Cargamos la configuración, la plantilla y el controlador.
+// Se cargan y configuran tanto la plantilla como el controlador
 require_once dirname(__DIR__, 2) . '/cabecera.php';
 require_once dirname(__DIR__) . '/plantillas/plantilla.php';
 require_once __DIR__ . '/controlador.php';
 require_once __DIR__ . '/vista_modificar.php';
 
-// Obtenemos los cinco muebles.
+// Se obtienen los muebles
 $muebles = obtenerMuebles();
 
-// Comprobamos que se ha recibido el índice del mueble.
+// Se comprueba que el índice se reciba
 if (!isset($_POST['indice'])) {
     paginaError('No se ha seleccionado ningún mueble.');
     exit;
 }
 
-// Comprobamos que el índice sea un entero.
+// Se comprueba que sea un valor entero
 $indice = filter_var($_POST['indice'], FILTER_VALIDATE_INT);
 
-// Comprobamos que el mueble exista.
+// Se comprueba que el mueble exista
 if ($indice === false || !isset($muebles[$indice])) {
     paginaError('El mueble seleccionado no existe.');
     exit;
 }
 
-// Obtenemos el mueble seleccionado.
+// Se obtiene el mueble que se ha seleccionado
 $mueble = $muebles[$indice];
 
-// Determinamos el tipo de mueble.
+// Se determina qué tipo de mueble estamos escogiendo
 $tipo = get_class($mueble);
 
-// Guardamos los datos actuales del mueble.
+// Se guardan los datos generales del mueble
 $datos = [
     'nombre' => $mueble->getNombre(),
     'fabricante' => $mueble->getFabricante(),
@@ -41,7 +41,7 @@ $datos = [
     'precio' => $mueble->getPrecio()
 ];
 
-// Guardamos las propiedades adicionales.
+// Se guardan las propiedades adicionales del mueble
 if ($mueble instanceof MuebleReciclado) {
     $datos['porcentajeReciclado'] = $mueble->getPorcentajeReciclado();
 } else {
@@ -52,14 +52,12 @@ if ($mueble instanceof MuebleReciclado) {
 // Array para guardar los errores.
 $errores = [];
 
-// Al principio no hay ningún mueble modificado.
 $muebleModificado = null;
 
-// Comprobamos si se ha enviado el formulario de modificación.
+// Se comprueba si el formulario se envió correctamente
 if (isset($_POST['accion']) && $_POST['accion'] === 'guardar') {
 
-    // Recogemos los datos del formulario.
-    // Comprobamos que sean cadenas para evitar errores.
+    // Se recogen los campos del formulario, comprobando que todos sean cadenas
     $campos = [
         'nombre',
         'fabricante',
@@ -79,12 +77,6 @@ if (isset($_POST['accion']) && $_POST['accion'] === 'guardar') {
         }
     }
 
-    // -------------------------------------------------
-    // VALIDACIÓN MEDIANTE LOS MÉTODOS SET
-    // -------------------------------------------------
-
-    // Creamos una instancia auxiliar del mismo tipo.
-    // Así no modificamos el mueble original mientras validamos.
     $auxiliar = clone $mueble;
 
     // Comprobamos el nombre.
@@ -130,10 +122,6 @@ if (isset($_POST['accion']) && $_POST['accion'] === 'guardar') {
             $errores[] = 'La serie no es válida.';
         }
     }
-
-    // -------------------------------------------------
-    // VALIDACIÓN MEDIANTE CONDICIONES
-    // -------------------------------------------------
 
     // Comprobamos el año.
     $anio = filter_var($datos['anio'], FILTER_VALIDATE_INT);
@@ -213,10 +201,6 @@ if (isset($_POST['accion']) && $_POST['accion'] === 'guardar') {
         $errores[] = 'El precio no puede ser inferior a 30.';
     }
 
-    // -------------------------------------------------
-    // ACTUALIZACIÓN DEL MUEBLE
-    // -------------------------------------------------
-
     // Solo actualizamos si no hay errores.
     if (count($errores) === 0) {
 
@@ -252,19 +236,19 @@ if (isset($_POST['accion']) && $_POST['accion'] === 'guardar') {
                 }
             }
 
-            // Finalmente cambiamos la fecha final.
+            // cambiamos la fecha final.
             if (!$auxiliar->setFechaFinVenta($datos['fechaFinVenta'])) {
                 $errores[] = 'No se ha podido establecer la fecha final.';
             }
 
         } else {
 
-            // Primero cambiamos la fecha final.
+            // cambiamos la fecha final.
             if (!$auxiliar->setFechaFinVenta($datos['fechaFinVenta'])) {
                 $errores[] = 'No se ha podido establecer la fecha final.';
             }
 
-            // Después cambiamos la fecha inicial.
+            // cambiamos la fecha inicial.
             if (!$auxiliar->setFechaIniVenta($datos['fechaIniVenta'])) {
                 $errores[] = 'No se ha podido establecer la fecha inicial.';
             }

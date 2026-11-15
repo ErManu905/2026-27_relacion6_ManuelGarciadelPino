@@ -1,22 +1,17 @@
 <?php
 
-// Cargamos la configuración y la plantilla.
+// Se cargan la configuración y plantilla de la web
 require_once dirname(__DIR__, 2) . '/cabecera.php';
 require_once dirname(__DIR__) . '/plantillas/plantilla.php';
 
-// Cargamos la vista.
+// Se carga la vista
 require_once __DIR__ . '/vista_pruebas.php';
 
-// Creamos un mueble de cada tipo.
+// Se crea muebles de cada tipo
 $muebleReciclado = new MuebleReciclado('SILLA DE PRUEBA');
 $muebleTradicional = new MuebleTradicional('MESA DE PRUEBA');
 
-// Array donde guardaremos los resultados.
 $pruebas = [];
-
-// -------------------------------------------------
-// PRUEBAS DE MUEBLEBASE
-// -------------------------------------------------
 
 // Comprobamos el nombre.
 $resultado = $muebleReciclado->getNombre() === 'SILLA DE PRUEBA';
@@ -27,13 +22,13 @@ $pruebas[] = [
 ];
 
 // Probamos establecer un nombre correcto.
-$resultado = $muebleReciclado->setNombre('SILLA NUEVA');
+$resultado = $muebleReciclado->setNombre('Nueva Silla');
 
 // Probamos establecer un nombre incorrecto.
 $nombreIncorrecto = !$muebleReciclado->setNombre('');
 
 // Comprobamos que se conserva el nombre anterior.
-$nombreSeMantiene = $muebleReciclado->getNombre() === 'SILLA NUEVA';
+$nombreSeMantiene = $muebleReciclado->getNombre() === 'Nueva Silla';
 
 $pruebas[] = [
     'nombre' => 'setNombre()',
@@ -141,10 +136,6 @@ $pruebas[] = [
     'resultado' => $accesoBloqueado
 ];
 
-// -------------------------------------------------
-// PRUEBAS DE MUEBLERECICLADO
-// -------------------------------------------------
-
 // Comprobamos el valor por defecto.
 $resultado = $muebleReciclado->getPorcentajeReciclado() === 10;
 
@@ -161,10 +152,6 @@ $pruebas[] = [
     'nombre' => 'setPorcentajeReciclado() y getPorcentajeReciclado()',
     'resultado' => $resultado && $porcentajeIncorrecto && $porcentajeSeMantiene
 ];
-
-// -------------------------------------------------
-// PRUEBAS DE MUEBLETRADICIONAL
-// -------------------------------------------------
 
 // Comprobamos el peso por defecto.
 $resultado = $muebleTradicional->getPeso() === 15.0;
@@ -190,10 +177,6 @@ $pruebas[] = [
     'nombre' => 'setSerie() y getSerie()',
     'resultado' => $resultado && $muebleTradicional->getSerie() === 'S02'
 ];
-
-// -------------------------------------------------
-// PRUEBAS DE CARACTERISTICAS
-// -------------------------------------------------
 
 // Creamos un objeto de características.
 $caracteristicas = new Caracteristicas();
@@ -254,10 +237,6 @@ $pruebas[] = [
         $caracteristicas->color === 'azul'
 ];
 
-// -------------------------------------------------
-// PRUEBAS DE CARACTERISTICAS EN MUEBLEBASE
-// -------------------------------------------------
-
 // Añadimos dos características y un argumento sin pareja.
 $muebleReciclado->anadirCaracteristicas(
     'color',
@@ -289,10 +268,6 @@ $pruebas[] = [
     'nombre' => 'anadirCaracteristicas() y getCaracteristicas()',
     'resultado' => $resultado
 ];
-
-// -------------------------------------------------
-// CONTAMOS LAS PRUEBAS CORRECTAS
-// -------------------------------------------------
 
 $correctas = 0;
 

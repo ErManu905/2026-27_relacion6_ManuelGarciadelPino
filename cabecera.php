@@ -1,7 +1,6 @@
 <?php 
 define("RUTABASE", "");
-//define("MODO_TRABAJO","produccion"); //en "produccion o en desarrollo
-define("MODO_TRABAJO","desarrollo"); //en "produccion o en desarrollo
+define("MODO_TRABAJO","desarrollo");
 
 if (MODO_TRABAJO=="produccion")
     error_reporting(0);

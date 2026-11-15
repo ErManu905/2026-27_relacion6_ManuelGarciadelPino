@@ -13,11 +13,6 @@ inicioCuerpo("Tienda Manolo");
 cuerpo();
 finCuerpo();
 
-
-// -------------------------------------------------
-// VISTAS
-// -------------------------------------------------
-
 // Vista de la cabecera.
 function cabecera(): void
 {
@@ -27,17 +22,13 @@ function cabecera(): void
 function cuerpo(): void
 {
 ?>
-
     <br /><br />
-
     <h2>Actividades</h2>
-
     <p>
         <a href="./aplicacion/principal/index.php">
             Acceder a la Relación 6 - Tienda
         </a>
     </p>
-
 <?php
 }
 
