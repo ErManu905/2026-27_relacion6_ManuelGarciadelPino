@@ -105,7 +105,7 @@ $pruebas[] = [
 ];
 
 // Probamos damePropiedadesAdicionales().
-$propiedades = $muebleReciclado->damePropiedadesAdicionales();
+$propiedades = $muebleReciclado->PropiedadesAdicionales();
 
 $resultado = $propiedades === ['PorcentajeReciclado'];
 

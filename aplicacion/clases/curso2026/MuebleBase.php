@@ -1,13 +1,12 @@
 <?php
 
-// Cargamos la librería de validaciones.
+// Se carga la librería de valicación
 require_once dirname(__DIR__, 3) . '/scripts/validacion.php';
 
 // Clase abstracta que contiene las propiedades comunes de los muebles.
 abstract class MuebleBase
 {
     // Número máximo de muebles.
-    // El enunciado no indica una cantidad, por lo que usamos 10 provisionalmente.
     public const MAXIMO_MUEBLES = 10;
 
     // Contador de muebles creados.
@@ -21,6 +20,7 @@ abstract class MuebleBase
     private string $_fechaIniVenta = '';
     private string $_fechaFinVenta = '';
     private float $_precio = 30.0;
+    private int $_material = 10;
 
     // Objeto que almacena las características adicionales.
     private Caracteristicas $_caracteristicas;
@@ -33,7 +33,8 @@ abstract class MuebleBase
         int $anio = 2020,
         ?string $fechaIniVenta = null,
         string $fechaFinVenta = '31/12/2040',
-        float $precio = 30.0
+        float $precio = 30.0,
+        int $material = 10
     ) {
         // Comprobamos si se pueden crear más muebles.
         $numero = 0;
@@ -89,6 +90,10 @@ abstract class MuebleBase
             $this->setPrecio(30.0);
         }
 
+        if (!$this->setMaterial($material)) {
+            $this->setMaterial(10);
+        }
+
         // Sumamos un mueble al contador.
         self::$mueblesCreados++;
     }
@@ -133,7 +138,7 @@ abstract class MuebleBase
     {
         $fabricante = trim($fabricante);
 
-        // Añadimos FaMu: si no lo tiene al principio.
+        // Añadimos FaMu si no está al principio.
         if (substr($fabricante, 0, 5) !== 'FaMu:') {
             $fabricante = 'FaMu:' . $fabricante;
         }
@@ -338,8 +343,40 @@ abstract class MuebleBase
         return $this->_caracteristicas;
     }
 
+    // Devuelve el enum de materiales
+    public function getMaterial(): Materiales
+    {
+        return $this->_Material;
+    }
+
+    // Establece el mueble a usar
+    public function setMaterial(int $valor): bool
+    {
+        $material = Materiales::tryFrom(($valor));
+
+        // Devuelve false si no existe el material
+        if ($material === null) {
+            return false;
+        }
+
+        // Devuelve true si existe el material
+        $this->_Material = $material;
+        return true;
+    }
+
+    // Obtiene la descripción del material deseado
+    public function getMaterialDescripcion(int $material): string
+    {
+        $material = $this->_Material;
+
+        if ($material === 5) return "De material madera";
+        if ($material === 10) return "De material hierro";
+        if ($material === 15) return "De material aluminio";
+        return "de material piedra";
+    }
+
     // Las clases hijas deben indicar sus propiedades adicionales.
-    abstract public function damePropiedadesAdicionales(): array;
+    abstract public function PropiedadesAdicionales(): array;
 
     // Comprueba si se pueden crear más muebles.
     public static function puedeCrear(int &$numero): bool
@@ -366,6 +403,7 @@ abstract class MuebleBase
             . ', vendido desde ' . $this->_fechaIniVenta
             . ' hasta ' . $this->_fechaFinVenta
             . ', precio ' . $this->_precio
+            . ', material ' . $this->_material
             . ', características: ' . $this->_caracteristicas;
     }
 

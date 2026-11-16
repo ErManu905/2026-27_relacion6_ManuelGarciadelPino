@@ -1,6 +1,6 @@
 <?php
 
-// Clase que representa un mueble reciclado.
+// Clase de muebles reciclados
 final class MuebleReciclado extends MuebleBase
 {
     // Porcentaje de material reciclado.
@@ -15,9 +15,10 @@ final class MuebleReciclado extends MuebleBase
         ?string $fechaIniVenta = null,
         string $fechaFinVenta = '31/12/2040',
         float $precio = 30.0,
-        int $porcentajeReciclado = 10
+        int $porcentajeReciclado = 10,
+        int $material = 5
     ) {
-        // Ejecutamos el constructor de la clase padre.
+        // Constructor sobre la clase padre
         parent::__construct(
             $nombre,
             $fabricante,
@@ -25,22 +26,23 @@ final class MuebleReciclado extends MuebleBase
             $anio,
             $fechaIniVenta,
             $fechaFinVenta,
-            $precio
+            $precio,
+            $material
         );
 
-        // Establecemos el porcentaje.
+        // Se establece el porcentaje de reciclado
         if (!$this->setPorcentajeReciclado($porcentajeReciclado)) {
             $this->setPorcentajeReciclado(10);
         }
     }
 
-    // Devuelve el porcentaje reciclado.
+    // Se devuelve el porcentaje de reciclado
     public function getPorcentajeReciclado(): int
     {
         return $this->_porcentajeReciclado;
     }
 
-    // Establece el porcentaje reciclado.
+    // Se establece el porcentaje reciclado.
     public function setPorcentajeReciclado(int $porcentaje): bool
     {
         if ($porcentaje < 0 || $porcentaje > 100) {
@@ -53,7 +55,7 @@ final class MuebleReciclado extends MuebleBase
     }
 
     // Devuelve las propiedades adicionales.
-    public function damePropiedadesAdicionales(): array
+    public function PropiedadesAdicionales(): array
     {
         return ['PorcentajeReciclado'];
     }

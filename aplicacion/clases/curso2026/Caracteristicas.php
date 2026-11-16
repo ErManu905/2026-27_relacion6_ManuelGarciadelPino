@@ -1,29 +1,29 @@
 <?php
 
-// Clase que almacena características adicionales.
+// Esta clase almacena las características adicionales
 class Caracteristicas implements IteratorAggregate
 {
-    // Array donde guardamos las características.
+    // En este array se guardan las características
     private array $_caracteristicas = [];
 
-    // Indica si se ha añadido ULTIMA.
+    // Esta función indica si se ha agregado la última característica
     private bool $_ultima = false;
 
-    // Añade o modifica una característica.
+    // Esta función añade o modifica una característica.
     public function __set(string $nombre, mixed $valor): void
     {
         // Comprobamos si la característica ya existe.
         $existe = array_key_exists($nombre, $this->_caracteristicas);
 
-        // Si ULTIMA está activada, no permitimos añadir nuevas.
+        // Si es la última, no permitimos añadir nuevas.
         if ($this->_ultima && !$existe) {
             throw new Exception('No se pueden añadir más características.');
         }
 
-        // Guardamos la característica.
+        // Se guarda la característica
         $this->_caracteristicas[$nombre] = $valor;
 
-        // Activamos el bloqueo cuando se añade ULTIMA.
+        // Impedimos que se agregen más si se añade la última
         if ($nombre === 'ULTIMA') {
             $this->_ultima = true;
         }

@@ -26,12 +26,15 @@ function obtenerMuebles(): array
         '01/02/2022',
         '31/12/2040',
         85.50,
-        80
+        80,
+        5
     );
 
     $muebles[1]->anadirCaracteristicas(
-        'color', 'verde',
-        'material', 'madera reciclada'
+        'color',
+        'verde',
+        'material',
+        'madera reciclada'
     );
 
     // Mueble 2: tradicional.
@@ -48,8 +51,10 @@ function obtenerMuebles(): array
     );
 
     $muebles[2]->anadirCaracteristicas(
-        'color', 'marron',
-        'acabado', 'barnizado'
+        'color',
+        'marron',
+        'acabado',
+        'barnizado'
     );
 
     // Mueble 3: reciclado.
@@ -61,12 +66,15 @@ function obtenerMuebles(): array
         '01/05/2023',
         '31/12/2040',
         120.00,
-        65
+        65,
+        15
     );
 
     $muebles[3]->anadirCaracteristicas(
-        'color', 'blanco',
-        'material', 'plastico reciclado'
+        'color',
+        'blanco',
+        'material',
+        'plastico reciclado'
     );
 
     // Mueble 4: tradicional.
@@ -83,8 +91,10 @@ function obtenerMuebles(): array
     );
 
     $muebles[4]->anadirCaracteristicas(
-        'color', 'marron',
-        'material', 'roble'
+        'color',
+        'marron',
+        'material',
+        'roble'
     );
 
     // Mueble 5: reciclado.
@@ -96,16 +106,17 @@ function obtenerMuebles(): array
         '01/06/2024',
         '31/12/2040',
         75.00,
-        90
+        90,
+        20
     );
 
     $muebles[5]->anadirCaracteristicas(
-        'color', 'natural',
-        'material', 'madera recuperada'
+        'color',
+        'natural',
+        'material',
+        'madera recuperada'
     );
 
     // Devolvemos el array.
     return $muebles;
 }
-
-?>
